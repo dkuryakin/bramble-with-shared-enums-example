@@ -1,0 +1,29 @@
+{
+  "log_level": "debug",
+  "services": [
+    "http://service1:5001/graphql",
+    "http://service2:5002/graphql"
+  ],
+  "plugins": [
+    {
+      "name": "admin-ui"
+    },
+    {
+      "name": "cors",
+      "config": {
+        "allowed-origins": [
+          "*"
+        ],
+        "allowed-headers": [
+          "*"
+        ],
+        "allow-credentials": true,
+        "max-age": 3600,
+        "debug": true
+      }
+    },
+    {
+      "name": "playground"
+    }
+  ]
+}

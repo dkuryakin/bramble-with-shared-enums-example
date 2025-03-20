@@ -1,0 +1,33 @@
+services:
+  bramble:
+    image: bramble
+    volumes:
+      - ./bramble/bramble.json:/etc/bramble.json
+    command: [ "-config", "/etc/bramble.json" ]
+    ports:
+      - "8080:8082"
+    depends_on:
+      service1:
+        condition: service_healthy
+      service2:
+        condition: service_healthy
+
+  service1:
+    build: ./service1
+    ports:
+      - "5001:5001"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5001/graphql" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+
+  service2:
+    build: ./service2
+    ports:
+      - "5002:5002"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5002/graphql" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
