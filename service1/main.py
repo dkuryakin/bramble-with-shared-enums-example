@@ -3,12 +3,22 @@ from enum import Enum
 import strawberry
 from fastapi import FastAPI
 from strawberry.asgi import GraphQL
+from strawberry.schema_directive import Location
 
 
-@strawberry.enum
+@strawberry.schema_directive(name="common", locations=[Location.ENUM, Location.OBJECT])
+class Common:
+    pass
+
+
+@strawberry.enum(directives=[Common()])
 class Permission(Enum):
     READ = 'READ'
-    WRITE = 'WRITE'
+
+
+@strawberry.type(directives=[Common()])
+class AltPermission:
+    read: bool
 
 
 @strawberry.type
@@ -23,6 +33,12 @@ class Query:
     @strawberry.field
     def permission1(self) -> Permission:
         return Permission.READ
+
+
+    @strawberry.field
+    def alt_permission1(self) -> AltPermission:
+        return AltPermission(read=True)
+
 
     @strawberry.field
     def service(self) -> Service:

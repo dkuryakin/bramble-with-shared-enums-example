@@ -4,7 +4,7 @@ build-patched-bramble:
 	git pull && \
 	docker build -t bramble .
 
-up: build-patched-bramble
+up:
 	docker-compose up --build --remove-orphans --force-recreate -d
 
 down:
@@ -14,20 +14,10 @@ test1:
 	curl -sX POST http://localhost:8080/query \
      -H "Content-Type: application/json" \
      -d '{"query": "{ permission1 }"}' | jq
-	#{
-	#  "data": {
-	#    "permission1": "READ"
-	#  }
-	#}
 
 test2:
 	curl -sX POST http://localhost:8080/query \
      -H "Content-Type: application/json" \
      -d '{"query": "{ permission2 }"}' | jq
-	#{
-	#  "data": {
-	#    "permission2": "WRITE"
-	#  }
-	#}
 
 test: up test1 test2 down
